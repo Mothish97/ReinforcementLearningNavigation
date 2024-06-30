@@ -1,11 +1,8 @@
-# ReinforcementLearningNavigation
-Navigate in dynamic traffic with reinforcement learning. 
-
-# For progress view the “report.pdf”
+For progress view the “report.pdf”
 
 
 
-# Code Running Instructions:
+Code Running Instructions:
 
 
 1) open the "Image_Type_Input_Highway_DQN.ipynb" file for image input type DQN of Highway
@@ -15,7 +12,7 @@ Navigate in dynamic traffic with reinforcement learning.
 3) In the main algorithm the results will be displayed in a window for each iteration.
 
 
-# Pre-requisites:(Latest version of the requirements are compatible with the code)
+Pre-requisites:(Latest version of the requirements are compatible with the code)
 
 1) Ubuntu 20 (Preferred)
 2) Anaconda Navigator with Jupyter Notebook
@@ -29,7 +26,7 @@ Navigate in dynamic traffic with reinforcement learning.
 
 
 
-# Results:
+Results:
 
 1) Environment testing result video can be viewed in the “environment.mp4" video in the project or link is provided in the report
 2) Learining efficiency video can be  be viewed in the “robot_learning.mp4" video in the project or link is provided in the report

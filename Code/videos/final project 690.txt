@@ -1,0 +1,293 @@
+%%%%
+%
+% This is the documentclass for the preparation of
+% manuscripts for Revista Mexicana de Física,
+% Revista Mexicana de Física E and 
+% Suplemento de la Revista Mexicana de Física
+%
+%%%%%
+\documentclass{rmf-d}
+\usepackage{nopageno,rmfbib,multicol,times,epsf,amsmath,amssymb,cite}
+\usepackage[T1]{fontenc} %Especial para español (for spanish)
+%\usepackage[spanish, mexico]{babel}
+\usepackage[]{caption2}
+\usepackage{graphicx}
+\usepackage{blindtext}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{minted}
+
+\def\rmfcornisa{ENPM690 Robotics Learning \hfill{\bf Final Project Report} 
+}
+\newcommand{\ssc}{\scriptscriptstyle}
+%
+\def\rmfcintilla{{Final Project Report} {\bf ??} (*?*) (????) ???--???}
+\clearpage \rmfcaptionstyle \pagestyle{myheadings}
+\setcounter{page}{1}
+
+\begin{document}
+\markboth{ RMF Editorial Team    }{ A \LaTeX template for the RMF, RMF-E, SRMF }
+
+%%%%%
+%
+% Please provide the following information
+%
+%%%%%
+\title{ Autonomous Navigation of Car in Highway using Deep-Q Learning.
+\vspace{-6pt}}
+\author{Mothish Raj Venkatesan Kumararaj}
+\address{Engineering Department, University of Maryland, College Park, Prince George County, mr2997@umd.edu}
+%%%%%
+%
+% Use as many authors and addresses as required
+%
+%%%%%
+\author{ }
+\address{ }
+\author{ }
+\address{ }
+\author{ }
+\address{ }
+\author{ }
+\address{ }
+\author{ }
+\address{ }
+\maketitle
+%%%%%
+%
+% To be filled by the Editorial Team of RMF, RMF-E 
+% and SRMF
+%
+%%%%%
+% \recibido{15 April 2022}{16 April 2023
+% \vspace{-12pt}}
+\vspace{-35pt}
+\begin{abstract}
+\vspace{1em} 
+
+\textbf{Abstract: In this project, I try to address a problem statement of navigation of cars in highway with dynamic traffic test cases, I used Deep-Q learning method  which is a type of reinforcement learning and designed my own model to navigate in a volatile environment. Additionally, we use another environment for the vehicle to park in a parking lot simulation which uses a model based learning method.}
+\\ \bf{\textbf{\textit{Key Words: Deep-Q Learing, Model-Based Learing, Tensorflow, Pytorch, Neural Network}}}
+\end{abstract}
+
+\begin{multicols}{2}
+
+
+\section{Introduction}
+Autonomous navigation has been a topic of the decade. In the current scenario, most of the automobile industries trying to achieve the autonomous navigation for most of their models. Most of the cars runs with the PID controller loop with obstacle avoidance. 
+
+In the project, I try to implement reinforcement learning techniques to improve the performance of the navigation system. For the project, I use Deep-Q learning method which is a type of reinforcement learning that is a combination of Neural network learning and Q-learning. In place of the Q-table we replace it with neural network to predict the possible action for the next state and the simulation is carried out for the dynamic environment and results are plotted. 
+
+Additionally, I also implemented a model-based learning technique for the parking lot system since the parking environment is not subjective to a drastic change as a highway environment. For the scope of the project for the parking simulation, I concentrated on the orientation of parking and the reaching the goal state. Simulation was also carried out for the parking lot and results are plotted.
+
+
+\section{Related Works}
+\subsection{Deep Q learning}
+\subsection{Model Based learning}
+\section{Methodology}
+\subsection{Highway Navigation}
+ Q-learning is a reinforcement learning algorithm which learn the value of the action in a particular state and it does not require any model of the environment hence its a model free learning. Since the Q-learning technique traverse through the Q-table, if the size of the state space increases the iteration will be time consuming to traverse through the table. Hence we introduce the Deep Q-learning where the Q-table is replaced with a neural network model. 
+
+\begin{figure}[H]
+ \includegraphics[width=\linewidth]
+    {nn}
+ \caption{Neural Network Model}
+ \label{fig:NN}
+\end{figure}
+\noindent
+
+For the each state input, the neural network will estimate the Q-value for each action that can be taken from the state and the objective is to approximate the Q function to satisfy the Bellman equation (1).
+
+\begin{equation}
+Q_{*} = E[R_{t+1} + \gamma \max_{a'} Q_{*}(s',a') ]
+\end{equation}
+
+Loss function is then calculated from the difference in output Q value and target Q value. From the calculated output the weights are then updated in the Neural network model using backward propagation. 
+
+\begin{figure}[H]
+ \includegraphics[width=\linewidth]
+    {dqn}
+ \caption{Deep-Q Learning Model}
+ \label{figDQN}
+\end{figure}
+\noindent
+
+\subsubsection{Exploration vs Exploitation}
+In exploration the agent will try to select the action whose environment is least explored and the exploitation part is where the agent prefers a action that is known and yields a higher reward. In initially we use the epsilon greedy rate $\epsilon$ to be 1 then in the later stages the agent becomes greedy and the rate decays and then switch to exploitation. 
+
+\subsubsection{Experience Replay}
+Experience replay technique is used during training of the network where we store the experience in the replay memory as the experience $e_{t}$ at time t
+
+\begin{equation}
+e_{t} = (s_{t},a_{t},r_{t+1},s_{t+1})
+\end{equation}
+
+In this data set, $s_{t}$ and $a_{t}$ is the state and the action taken on the state. $r_{t+1}$ is the reward of the state action pair $s_{t}$ and $a_{t}$. $s_{t+1}$ is the next state of the environment.
+
+\begin{figure}[H]
+\begin{center}
+ \includegraphics [scale=1.5] {relay}
+ \end{center}
+
+ \caption{Experience Replay Dataset}
+ \label{fig:ER}
+\end{figure}
+\noindent
+
+The agent's experience is stored at each time-step is stored in the replay memory set of finite size of last experiences. We randomly sample from the replay memory for training the agent. The reason we do that is since initially we are training the agent only with sequential experience from the environment which creates consecutive samples, which can result in correlation between each data in the graph leads to inefficient training. By introducing experience replay, we can break the correlation and provide a better training to the agent. 
+
+\subsubsection{Loss Function}
+The loss function we use in our training model is the Mean Squared error. It is the  simplest and most common loss function. To calculate the Mean Squared error, you take the difference between your model's predictions and the ground truth, square it, and average it out across the whole data set. 
+
+\subsubsection{Loss Calculation}
+After all the experience data set is stored in the replay memory we then sample a random data from the replay memory then we send the batch of data into the model. After forward propagation, we receive the Q values for the state action pair. Then, we subtract it from the optimal Q value for that state and action obtained from the right hand side of Bellman's equation (1).  
+
+The loss calculation formula is given by, 
+
+\begin{equation}
+loss = Q_{*}(s,a) - Q(s,a)
+\end{equation}
+\begin{equation}
+loss = E[R_{t+1} + \gamma \max_{a'} Q_{*}(s',a') ] - E[\sum_{n=0}^{\infty} \gamma^n R_{t+n+1}]
+\end{equation}
+
+In the given equation, the s' and a' are the state action pair of the next time step. Hence, we use forward propagation two times in each iteration to get the Q values of the current time step and maximum Q value of the next time step. Backward propagation is the done using the loss calculated. Gradient descent is performed to update the weights in the model.
+
+\subsubsection{Target and  Policy network}
+In the above given equation for loss function, the q' and s' are the state and the Q values of the next time step. If we are using the same neural network then we need to update the weights to calculate the next state and Q values(s',q'). After updating the weights of the neural network, the Q-values move towards the Q-Target values but also Q-Target values move in the same direction which makes the optimization chasing its own tail and unstable. Hence we create a target network which is a exact copy of the policy network. Its weights are frozen  policy network's initial weights, and we update the weights in the target network taking the weights from the policy network after certain specified time step.
+
+
+\subsubsection{Optimization}
+For the optimization of the loss function, I used the Adaptive Moment Estimation which is a algorithm for optimization for gradient descent. It is a combination of the ‘gradient descent with momentum’ algorithm and the ‘RMSP’ algorithm,  efficient with large problem involving a lot of data or parameters.
+
+\subsection{Parking System}
+In addition to the proposed problem, I also have tried implementing a Model-Based reinforcement learning technique to simulate the parking environment. Model based learning is an approach where the  the information or assumption about the problem domain are made explicit in the form of a model. This model is then used to create a model-specific to learn or reason about the domain. 
+
+The reason for introduction of model based learning is in model-free learning the model runs with reward as the reinforcement goal but it can render an ineffective output where the environment has only sparse rewards where the chance of getting a rewards in a random pattern is almost negligible. 
+
+\begin{figure}[H]
+ \includegraphics[width=\linewidth]
+    {model}
+ \caption{Model Based Learning}
+ \label{figDQN}
+\end{figure}
+\noindent
+
+\subsubsection{Model based learning}
+In this particular environment we consider a optimal control problem of Markov Decision Process where the reward function \textbf{R} is known to us ant the deterministic dynamics \textbf{$s_{t+1}=f(s_{t},a_{t})$} is unknown
+
+
+In the given environment, we learn the model of the dynamics $f_{\theta} \approx f$ using the regression on interaction  data and then we use the learn dynamic model to find the optimal trajectory
+
+\begin{equation}
+ \max_{a_{0},a_{1},a_{2}..} \sum_{t=0}^{\infty}\gamma^{t}R(s_{t},a_{t})
+\end{equation}
+
+\subsubsection{Dynamic Model}
+Initially I randomly interact with the environment to collect the experience batch.
+\begin{equation}
+ D= {s_{R},a_{t},s_{t+1}}_{t\epsilon|1,N|}
+\end{equation}
+Then I designed a model to represent the dynamic system. For this project I utilized a structured model inspired from the Linear Time-Invariant systems(LTI) which can be represented as following.
+
+\begin{equation}
+ f_{\theta}(s,a) = A_{\theta}(s,a)s + B_{\theta}(s,a)a
+\end{equation}
+where s and a are the state and action pairs and we parameterize $A_{\theta}$ and $B_{\theta}$ as two neural network.
+
+\subsubsection{Loss Calculation}
+For the loss function for the given problem we use the Mean Squared Error, calculated by difference between your model's predictions and the ground truth, square it, and average it out across the whole data set. the MSE is given by the formula. 
+
+\begin{equation}
+ L^{2}(f_{\theta};D) = 1/|D|  \sum_{s_{t},a_{t},s_{t+1} \epsilon D} {||s_{t+1} - f_{\theta}(s_{t},a_{t})||}^{2}
+\end{equation}
+
+
+\subsubsection{Optimization}
+For the optimization of the loss function, I used the Adaptive Moment Estimation which is a algorithm for optimization for gradient descent. For the particular problem we use stochastic gradient descent which is a  is a first-order iterative optimization algorithm for finding a local minimum of a differentiable function.
+
+
+\section{Simulation}
+For the simulation environment, I utilized the library called gym specially designed to train reinforcement models. For this specific project I used the highway environment and parking lot environment which can be imported using gym. 
+
+\subsection{Highway Simulation}
+
+\section{References}
+
+References must be presented as follows: authors’ name, manuscript title, journal’s name (abbreviated according to international conventions), volume number in bold face, year (within parentheses), first page number, and DOI hyper-link. For books the reference must include: author's name, book's name, publisher, place of publication and corresponding pages. If possible, please also provide the URL of the reference.
+ References~\cite{ley2018recent,griffiths2005introduction} are introduced manually as
+\begin{minted}{latex}
+\begin{thebibliography}{99}
+\bibitem{ELK} E. Ley-Koo, 
+Recent progress in confined atoms and 
+molecules: Superintegrability and 
+symmetry breakings, 
+Rev. Mex. Fis. 64 (2018) 326,
+\url{https://doi.org/10.31349/RevMexFis.64.326}
+
+\bibitem{Griffiths} D.J. Griffiths, 
+Introduction to Electrodynamics, 
+2nd ed. 
+(Prentice Hall, Englewood Cliffs, NJ, 1989), 
+pp. 331–334.
+\end{thebibliography}
+\end{minted}
+
+
+
+BibTeX can also be used with the {\rm rmf-style} that is provided in this template. The same references~\cite{ley2018recent,griffiths2005introduction} in BibTeX format should be added in a .bib file as
+{\footnotesize
+\begin{minted}{bib}
+@article{ley2018recent,
+  title={Recent progress in confined atoms and 
+  molecules: Superintegrability and 
+  symmetry breakings},
+  author={Ley-Koo, E},
+  journal={Rev. Mex. Fís.},
+  volume={64},
+  number={4},
+  pages={326--363},
+  year={2018},
+  publisher={Sociedad Mexicana de Física},
+  doi={https://doi.org/10.31349/RevMexFis.64.326}
+}
+@book{griffiths2005introduction,
+  title={Introduction to electrodynamics},
+  author={David J Griffiths},
+  year={1989},
+  publisher={Prentice Hall},
+  edition={2},
+  address={Englewood Cliffs, NJ},
+  pages = {331-334}
+}
+\end{minted}
+}
+
+\noindent
+Eventually, upon acceptance, the authors should provide the .bbl file for edditorial process.
+
+Acknowledgements are presented at the end of the manuscript, before the reference section. 
+
+\end{multicols}
+
+\medline
+\begin{multicols}{2}
+%%%%%%%%%%%%%%%
+%
+%Using BibTeX
+\nocite{*}
+\bibliographystyle{rmf-style}
+\bibliography{ref}
+%
+%%%%%%%%
+%
+%Introducing references manually
+%
+
+%\begin{thebibliography}{99}
+%\bibitem{ELK} E. Ley-Koo, Recent progress in confined atoms and molecules: Superintegrability and symmetry breakings, Rev. Mex. Fis. 64 (2018) 326, \url{https://doi.org/10.31349/RevMexFis.64.326}
+%
+%\bibitem{Griffiths} D.J. Griffiths, Introduction to Electrodynamics, 2nd ed. (Prentice Hall, Englewood Cliffs, NJ, 1989), pp. 331–334.
+%
+%\end{thebibliography}
+\end{multicols}
+\end{document}
