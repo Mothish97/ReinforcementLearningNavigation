@@ -33,3 +33,8 @@ Navigate in dynamic traffic with reinforcement learning.
 
 1) Environment testing result video can be viewed in the “environment.mp4" video in the project or link is provided in the report
 2) Learining efficiency video can be  be viewed in the “robot_learning.mp4" video in the project or link is provided in the report
+
+
+
+https://github.com/Mothish97/ReinforcementLearningNavigation/assets/86384730/dc1cd78d-3fcc-4edc-bc97-6882751909fd
+
